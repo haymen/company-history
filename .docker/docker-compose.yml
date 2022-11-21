@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+
+  php:
+    image: ${PROJECT_NAME}-php:dev
+    container_name: ${PROJECT_NAME}-php
+    build:
+      target: dev
+      dockerfile: php-fpm/Dockerfile
+      context: .
+      args:
+        VERSION: 8.1.11
+        TIMEZONE: Europe/Paris
+        APP_CODE_PATH: /var/www
+        XDEBUG_VERSION: 3.0.2
+        COMPOSER_VERSION: 2.0.13
+    volumes:
+      - ../:/var/www:cached
+    restart: always
+
+
+  nginx:
+    image: ${PROJECT_NAME}-nginx:dev
+    container_name: ${PROJECT_NAME}-nginx
+    build:
+      dockerfile: nginx/Dockerfile
+      context: .
+      target: dev
+      args:
+        VERSION: 1.19.6
+        TIMEZONE: Europe/Paris
+        PHP_UPSTREAM: php:9000
+        VIRTUAL_HOST: "company-history.dev"
+        NGINX_ROOT: /var/www/public
+        APP_CODE_PATH: /var/www
+    volumes:
+      - ../public/:${APP_CODE_PATH}/public:cached
+      - ./nginx/config/api-location.conf:/etc/nginx/api-location.conf:ro
+    depends_on:
+      - php
+    restart: always
+    ports:
+      - 80:80
+
+  db:
+    image: mysql:8.0.31
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db-company-history'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'company-user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: '123456789'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: '123456'
+    expose:
+      - '3306'
+    ports:
+      - 3306:3306
+    volumes:
+      - database-mysql:/var/data
+
+
+volumes:
+  database-mysql: {}
+
+
