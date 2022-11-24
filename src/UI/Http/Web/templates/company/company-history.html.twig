@@ -6,6 +6,7 @@
 
     <div class="container ">
         <h1>Historique de changement </h1>
+        <h2>Détail de la société</h2>
         <table class="table">
             <tr>
                 <td>{{ history.name }}</td>
@@ -17,7 +18,7 @@
                 <td>{{ history.updatedAt|date('d-m-Y H:i') }}</td>
             </tr>
         </table>
-
+        <h2>Liste des adresses</h2>
         {% for adress in history.addressLog %}
             <table class="table">
                 <tr>

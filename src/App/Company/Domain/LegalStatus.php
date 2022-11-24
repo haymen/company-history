@@ -2,7 +2,7 @@
 
 namespace App\Company\Domain;
 
-use App\Company\Infrastructure\LegalStatusRepository;
+use App\Company\Infrastructure\Doctrine\LegalStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LegalStatusRepository::class)]

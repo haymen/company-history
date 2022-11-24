@@ -63,6 +63,7 @@ class CompanyController extends AbstractController
         return $this->renderForm('company/create.html.twig', [
             'form' => $company_form,
             'companyLogList' => $companyLogList,
+            'id' => $id,
         ]);
     }
 
@@ -82,7 +83,7 @@ class CompanyController extends AbstractController
         $history = $this->entityManager->getRepository(CompanyLog::class)->findOneBy(['id' => $id]);
 
         return $this->render('company/company-history.html.twig', [
-            'history' => $history
+            'history' => $history,
         ]);
     }
 }

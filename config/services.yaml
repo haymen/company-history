@@ -24,3 +24,17 @@ services:
     UI\Http\Web\Controller\:
         resource: '../src/UI/Http/Web/Controller/*'
         tags: [ 'controller.service_arguments' ]
+
+    App\Company\EntityListener\CompanyListener:
+        tags:
+            - # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'postUpdate'
+                entity: 'App\Company\Domain\Company'
+
+    App\Company\EntityListener\AddressListener:
+        tags:
+            - # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'postUpdate'
+                entity: 'App\Company\Domain\Company'

@@ -4,10 +4,8 @@ namespace App\Company\EntityListener;
 
 use App\Company\Domain\Address;
 use App\Company\Domain\LogHistory\AddressLog;
-use App\Company\Domain\LogHistory\CompanyLog;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class AddressListener
@@ -34,17 +32,8 @@ class AddressListener
             ->setUpdatedAt($address->getUpdatedAt())
             ->setAddressId($address->getId());
 
-        $this->entityManager->persist($addressLog);
-        $this->entityManager->flush();
-
-//        $company = $address->getCompany();
-//        $companyLog = (new CompanyLog())->setCreatedAt()
-
-//        dump($address);
 //        $this->entityManager->persist($addressLog);
 //        $this->entityManager->flush();
-//        if($company instanceof Company){
-//
-//        }
+
     }
 }

@@ -9,10 +9,6 @@ class CompanyListener
 {
     public function postUpdate(Company $company, LifecycleEventArgs $event): void
     {
-//        dd($company);
 
-//        if($company instanceof Company){
-//
-//        }
     }
 }

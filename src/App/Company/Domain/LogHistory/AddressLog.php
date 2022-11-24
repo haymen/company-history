@@ -2,7 +2,7 @@
 
 namespace App\Company\Domain\LogHistory;
 
-use App\Company\Infrastructure\AddressLogRepository;
+use App\Company\Infrastructure\Doctrine\AddressLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AddressLogRepository::class)]

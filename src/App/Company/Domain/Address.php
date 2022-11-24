@@ -2,7 +2,7 @@
 
 namespace App\Company\Domain;
 
-use App\Company\Infrastructure\AddressRepository;
+use App\Company\Infrastructure\Doctrine\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 

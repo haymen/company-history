@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Company\Infrastructure;
+namespace App\Company\Infrastructure\Doctrine;
 
 use App\Company\Domain\Address;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Address[]    findAll()
  * @method Address[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AddressLogRepository extends ServiceEntityRepository
+class AddressRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Company\EventSubscriber;
+namespace App\Company\Infrastructure\EventSubscriber;
 
 use App\Company\Domain\Address;
 use App\Company\Domain\LogHistory\AddressLog;
