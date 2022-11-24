@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Repository;
+namespace App\Company\Infrastructure;
 
-use App\Entity\Company;
+use App\Company\Domain\Company;
+use App\Company\Domain\LogHistory\CompanyLog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Company>
+ * @extends ServiceEntityRepository<CompanyLog>
  *
- * @method Company|null find($id, $lockMode = null, $lockVersion = null)
- * @method Company|null findOneBy(array $criteria, array $orderBy = null)
- * @method Company[]    findAll()
- * @method Company[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CompanyLog|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CompanyLog|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CompanyLog[]    findAll()
+ * @method CompanyLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CompanyRepository extends ServiceEntityRepository
+class CompanyLogRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Company::class);
+        parent::__construct($registry, CompanyLog::class);
     }
 
-    public function save(Company $entity, bool $flush = false): void
+    public function save(CompanyLog $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +31,7 @@ class CompanyRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Company $entity, bool $flush = false): void
+    public function remove(CompanyLog $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

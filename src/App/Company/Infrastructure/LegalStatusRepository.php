@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Company\Infrastructure;
 
-use App\Entity\LegalStatus;
+use App\Company\Domain\LegalStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

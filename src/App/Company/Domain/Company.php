@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Entity;
+namespace App\Company\Domain;
 
-use App\Repository\CompanyRepository;
+use App\Company\Infrastructure\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
+#[Gedmo\Loggable]
 class Company
 {
     #[ORM\Id]
@@ -16,6 +19,7 @@ class Company
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Gedmo\Versioned]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -25,19 +29,21 @@ class Company
     private ?string $immatCity = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $immatDate = null;
+    private ?\DateTime $immatDate;
 
     #[ORM\Column]
     private ?float $capital = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Gedmo\Timestampable(on: 'create')]
+    private ?\DateTime $createdAt;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[ORM\Column(type: "datetime")]
+    #[Gedmo\Timestampable(on: 'update')]
+    private ?\DateTime $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Address::class)]
-    private ArrayCollection $addresses;
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Address::class, cascade: ["persist"])]
+    private Collection $addresses;
 
     #[ORM\ManyToOne(targetEntity: LegalStatus::class)]
     private LegalStatus $legalStatus;
@@ -88,12 +94,12 @@ class Company
         return $this;
     }
 
-    public function getImmatDate(): ?\DateTimeInterface
+    public function getImmatDate(): ?\DateTime
     {
         return $this->immatDate;
     }
 
-    public function setImmatDate(\DateTimeInterface $immatDate): self
+    public function setImmatDate(\DateTime $immatDate): self
     {
         $this->immatDate = $immatDate;
 
@@ -112,45 +118,41 @@ class Company
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
 
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getAddresses(): ArrayCollection
+    public function getAddresses(): Collection
     {
         return $this->addresses;
     }
 
     public function addAddress(Address $address): self
     {
-        if (!$this->addresses->contains($address)) {
-            $this->addresses[] = $address;
-        }
+        // if (!$this->addresses->contains($address)) {
+
+        $this->addresses->add($address);
+        $address->setCompany($this);
+
+        // }
 
         return $this;
+    }
+
+    public function removeAddress(Address $address)
+    {
+        $this->addresses->removeElement($address);
     }
 
     /**

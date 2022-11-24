@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Company\Domain;
 
-use App\Repository\AddressRepository;
+use App\Company\Infrastructure\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -23,18 +24,21 @@ class Address
     private ?string $streetName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $City = null;
+    private ?string $city = null;
 
     #[ORM\Column]
     private ?int $postalCode = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Gedmo\Timestampable(on: 'create')]
+    private ?\DateTime $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updateAt = null;
+    #[Gedmo\Timestampable(on: 'update')]
+    private ?\DateTime $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'addresses')]
+    #[ORM\JoinColumn(name: "company_id", referencedColumnName: "id")]
     private Company $company;
 
     public function getId(): ?int
@@ -80,12 +84,12 @@ class Address
 
     public function getCity(): ?string
     {
-        return $this->City;
+        return $this->city;
     }
 
-    public function setCity(string $City): self
+    public function setCity(string $city): self
     {
-        $this->City = $City;
+        $this->city = $city;
 
         return $this;
     }
@@ -102,26 +106,26 @@ class Address
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updateAt;
+        return $this->updatedAt;
     }
 
-    public function setUpdateAt(\DateTimeImmutable $updateAt): self
+    public function setUpdatedAt(\DateTime $updatedAt): self
     {
-        $this->updateAt = $updateAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

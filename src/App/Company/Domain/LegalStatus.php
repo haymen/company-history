@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Company\Domain;
 
-use App\Repository\LegalStatusRepository;
+use App\Company\Infrastructure\LegalStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LegalStatusRepository::class)]

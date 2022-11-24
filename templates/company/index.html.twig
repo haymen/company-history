@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List Company{% endblock %}
+
+{% block body %}
+
+    <div class="container ">
+        <h1>Liste des sociétés </h1>
+        <table class="table">
+            <thead>
+            <th>Nom</th>
+            <th>numéro SIREN,</th>
+            <th>Ville d’immatriculation</th>
+            <th>Date d’immatriculation</th>
+            <th>Capital</th>
+            <th>Forme juridique</th>
+            <th>Action</th>
+            </thead>
+            <tbody>
+            {% if companies is not empty %}
+                {% for company in companies %}
+                    <tr>
+                        <td>{{ company.name }}</td>
+                        <td>{{ company.siren }}</td>
+                        <td>{{ company.immatCity }}</td>
+                        <td>{{ company.immatDate|date('d-m-Y') }}</td>
+                        <td>{{ company.capital }}</td>
+                        <td>{{ company.legalStatus.name }}</td>
+                        <td><a href="{{ path('company_create',{'id':company.id}) }}" class="btn btn-primary">modifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+

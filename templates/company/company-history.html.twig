@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List Company{% endblock %}
+
+{% block body %}
+
+    <div class="container ">
+        <h1>Historique de changement </h1>
+        <table class="table">
+            <tr>
+                <td>{{ history.name }}</td>
+                <td>{{ history.siren }}</td>
+                <td>{{ history.immatCity }}</td>
+                <td>{{ history.immatDate|date('d-m-Y H:i') }}</td>
+                <td>{{ history.capital }}</td>
+                <td>{{ history.createdAt|date('d-m-Y H:i') }}</td>
+                <td>{{ history.updatedAt|date('d-m-Y H:i') }}</td>
+            </tr>
+        </table>
+
+        {% for adress in history.addressLog %}
+            <table class="table">
+                <tr>
+                    <td>{{ adress.number }}</td>
+                    <td>{{ adress.streetType }}</td>
+                    <td>{{ adress.streetName }}</td>
+                    <td>{{ adress.city }}</td>
+                    <td>{{ adress.createdAt|date('d-m-Y H:i') }}</td>
+                    <td>{{ adress.updatedAt|date('d-m-Y H:i') }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+

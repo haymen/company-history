@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add new Company{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 ">
+        <h1>Ajouter une société</h1>
+        <div class="row">
+            <label class="col-form-label col-sm-2">Historique des changement</label>
+            <div class="col-sm-10">
+                <select class="form-select" id="company-history-select">
+                    <option>Choisir une date</option>
+                    {% for dateLog in companyLogList %}
+                        <option value="{{ dateLog.id }}">{{ dateLog.updatedAt|date('d-m-Y G:i') }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.siren) }}
+        {{ form_row(form.immatCity) }}
+        {{ form_row(form.immatDate) }}
+        {{ form_row(form.capital) }}
+        {{ form_row(form.legalStatus) }}
+        <div class="row">
+            <div class="col-12" id="address_companies"
+                 data-prototype="{{ form_widget(form.addresses.vars.prototype)|e('html_attr') }}">
+                <table class="table">
+                    <tr>
+                        <td><label class="col-form-label" style="float: left">Company address</label></td>
+                        <td>
+                            <div class="address_companies_cards">
+                                {% for row in form.addresses %}
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            {{ form_row(row) }}
+                                        </div>
+                                        <div class="card-footer"><a href="#" class="btn btn-danger del-card">supprimer</a></div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    <a href="#" class="btn btn-info add-new-address">Ajouter une nouvelle addresse</a>
+    {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.add-new-address').on('click', function () {
+                var dataPrototype = $('#address_companies').data('prototype');
+                var indexAddresses = $('.address_companies_cards > .card').length;
+                dataPrototype = dataPrototype.replace(/__name__/g, indexAddresses.toString());
+                var card = $('<div class="card mb-4"></div>');
+                var cardBody = $('<div class="card-body"></div>');
+                var cardFooter = $('<div class="card-footer"><a href="#" class="btn btn-danger del-card">supprimer</a></div>');
+                cardBody.html(dataPrototype);
+                card.append(cardBody);
+                card.append(cardFooter);
+                $('.address_companies_cards').append(card);
+                console.log($('.address-row').length);
+            });
+            $(this).on('click', '.del-card', function () {
+                $(this).parents('.card:first').remove();
+            });
+
+            $(this).on('change','#company-history-select', function(){
+                if($(this).val() !== ''){
+                    var historyId = $(this).val();
+                    var historyRouteUrl = "{{ path('company_history', {id: "historyId"}) }}";
+                    historyRouteUrl = historyRouteUrl.replace("historyId",historyId);
+                    window.open(historyRouteUrl, '_blank').focus();
+                }
+            });
+
+        });
+
+
+    </script>
+{% endblock %}
