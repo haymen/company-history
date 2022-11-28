@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[Gedmo\Loggable]
@@ -20,15 +21,19 @@ class Company
 
     #[ORM\Column(length: 255)]
     #[Gedmo\Versioned]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $siren = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $immatCity = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: "datetime")]
+    #[Assert\Type('datetime')]
     private ?\DateTime $immatDate;
 
     #[ORM\Column]
@@ -36,16 +41,20 @@ class Company
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
+    #[Assert\Type('datetime')]
     private ?\DateTime $createdAt;
 
     #[ORM\Column(type: "datetime")]
     #[Gedmo\Timestampable(on: 'update')]
+    #[Assert\Type('datetime')]
     private ?\DateTime $updatedAt;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Address::class, cascade: ["persist"])]
+    #[Assert\Valid]
     private Collection $addresses;
-
+    #[Assert\NotBlank]
     #[ORM\ManyToOne(targetEntity: LegalStatus::class)]
+
     private LegalStatus $legalStatus;
 
     public function __construct()
@@ -169,5 +178,21 @@ class Company
     public function setLegalStatus(LegalStatus $legalStatus): void
     {
         $this->legalStatus = $legalStatus;
+    }
+
+    /**
+     * @param \DateTime|null $updatedAt
+     */
+    public function setUpdatedAt(?\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @param \DateTime|null $createdAt
+     */
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 }

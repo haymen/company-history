@@ -18,6 +18,7 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/App/Shared/Infrastructure/Kernel.php'
+            - '../src/App/Shared/Infrastructure/migrations'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -37,4 +38,4 @@ services:
             - # these are the options required to define the entity listener
                 name: 'doctrine.orm.entity_listener'
                 event: 'postUpdate'
-                entity: 'App\Company\Domain\Company'
+                entity: 'App\Company\Domain\Address'

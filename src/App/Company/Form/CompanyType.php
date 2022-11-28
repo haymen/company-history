@@ -7,9 +7,8 @@ use App\Company\Domain\LegalStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,7 +21,7 @@ class CompanyType extends AbstractType
             ->add('name', TextType::class)
             ->add('siren', TextType::class)
             ->add('immatCity', TextType::class)
-            ->add('immatDate', DateTimeType::class, [
+            ->add('immatDate', DateType::Class, [
                 'widget' => 'single_text',
             ])
             ->add('capital', NumberType::class)
@@ -36,11 +35,6 @@ class CompanyType extends AbstractType
                 'label' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
-            ])
-            ->add('save', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-success'
-                ]
             ]);
     }
 

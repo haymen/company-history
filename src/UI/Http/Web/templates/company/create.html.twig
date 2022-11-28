@@ -3,52 +3,67 @@
 {% block title %}Add new Company{% endblock %}
 
 {% block body %}
-    <div class="container mt-5 ">
-        <h1>Ajouter une société</h1>
+    <div class="container mt-5 mb-5">
+        <h1>{% if(id is not empty) %}Modifier {% else %} Ajouter{% endif %} une société</h1>
         {% if(id is not empty) %}
-        <div class="row">
-            <label class="col-form-label col-sm-2">Historique des changements</label>
-            <div class="col-sm-10">
-                <select class="form-select" id="company-history-select">
-                    <option>Choisir une date</option>
-                    {% for dateLog in companyLogList %}
-                        <option value="{{ dateLog.id }}">{{ dateLog.updatedAt|date('d-m-Y G:i') }}</option>
-                    {% endfor %}
-                </select>
+            <hr/>
+            <div class="row">
+                <label class="col-form-label col-sm-2">Historique des changements</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="company-history-select">
+                        <option>Choisir une date</option>
+                        {% for dateLog in companyLogList %}
+                            <option value="{{ dateLog.id }}">{{ dateLog.updatedAt|date('d-m-Y G:i') }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-        </div>
+            <hr/>
         {% endif %}
         {{ form_start(form) }}
+        {{ form_errors(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.siren) }}
         {{ form_row(form.immatCity) }}
         {{ form_row(form.immatDate) }}
         {{ form_row(form.capital) }}
         {{ form_row(form.legalStatus) }}
+        <hr/>
         <div class="row">
             <div class="col-12" id="address_companies"
                  data-prototype="{{ form_widget(form.addresses.vars.prototype)|e('html_attr') }}">
                 <table class="table">
                     <tr>
-                        <td><label class="col-form-label" style="float: left">Company address</label></td>
+                        <td><label class="col-form-label" style="float: left">Liste des adresses</label></td>
                         <td>
                             <div class="address_companies_cards">
-                                {% for row in form.addresses %}
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            {{ form_row(row) }}
+                                {% if  (form.addresses is empty) %}
+                                    <label class="no-address">Il n'y a pas d'adresses rattaché à cette société</label>
+                                {% else %}
+                                    {% for row in form.addresses %}
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                {{ form_row(row) }}
+                                            </div>
+                                            <div class="card-footer"><a href="#"
+                                                                        class="btn btn-danger del-card">supprimer</a>
+                                            </div>
                                         </div>
-                                        <div class="card-footer"><a href="#" class="btn btn-danger del-card">supprimer</a></div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
-    <a href="#" class="btn btn-info add-new-address">Ajouter une nouvelle addresse</a>
-    {{ form_end(form) }}
+        <a href="#" class="btn btn-info add-new-address">Ajouter une nouvelle addresse</a>
+
+        <div class="col-sm-12">
+            <button type="submit" class="btn btn-success float-end btn ">sauvegarder</button>
+            <a href="{{ path('company_index') }}" class="btn btn-info float-end me-2">annuler</a>
+        </div>
+        {{ form_end(form) }}
     </div>
 
 {% endblock %}
@@ -66,18 +81,22 @@
                 cardBody.html(dataPrototype);
                 card.append(cardBody);
                 card.append(cardFooter);
+                $('.no-address').hide();
                 $('.address_companies_cards').append(card);
-                console.log($('.address-row').length);
             });
             $(this).on('click', '.del-card', function () {
                 $(this).parents('.card:first').remove();
+                var indexAddresses = $('.address_companies_cards > .card').length;
+                if(indexAddresses === 0){
+                    $('.no-address').show();
+                }
             });
 
-            $(this).on('change','#company-history-select', function(){
-                if($(this).val() !== ''){
+            $(this).on('change', '#company-history-select', function () {
+                if ($(this).val() !== '') {
                     var historyId = $(this).val();
                     var historyRouteUrl = "{{ path('company_history', {id: "historyId"}) }}";
-                    historyRouteUrl = historyRouteUrl.replace("historyId",historyId);
+                    historyRouteUrl = historyRouteUrl.replace("historyId", historyId);
                     window.open(historyRouteUrl, '_blank').focus();
                 }
             });

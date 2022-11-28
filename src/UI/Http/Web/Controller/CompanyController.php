@@ -59,7 +59,6 @@ class CompanyController extends AbstractController
             return $this->redirectToRoute('company_index');
         }
 
-
         return $this->renderForm('company/create.html.twig', [
             'form' => $company_form,
             'companyLogList' => $companyLogList,
@@ -67,7 +66,7 @@ class CompanyController extends AbstractController
         ]);
     }
 
-    #[Route('/index', name: 'index')]
+    #[Route('/', name: 'index')]
     public function index()
     {
         $companies = $this->entityManager->getRepository(Company::class)->findAll();

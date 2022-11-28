@@ -5,6 +5,7 @@ namespace App\Company\Domain;
 use App\Company\Infrastructure\Doctrine\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -15,30 +16,38 @@ class Address
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $number = null;
+    #[Assert\NotBlank]
+    private ?string $number = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $streetType = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $streetName = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
     #[ORM\Column]
+    #[Assert\Type('int')]
     private ?int $postalCode = null;
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
+    #[Assert\Type('datetime')]
     private ?\DateTime $createdAt;
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'update')]
+    #[Assert\Type('datetime')]
     private ?\DateTime $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'addresses')]
     #[ORM\JoinColumn(name: "company_id", referencedColumnName: "id")]
+    #[Assert\Valid]
     private Company $company;
 
     public function getId(): ?int
